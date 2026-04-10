@@ -38,15 +38,15 @@ export function NoteInput({ onSave }) {
     <div className="mx-auto mb-6 max-w-xl px-1">
       <div
         ref={rootRef}
-        className={`rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md ${
-          expanded ? "shadow-md" : ""
+        className={`rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-[#5f6368] dark:bg-[#303134] dark:hover:shadow-md ${
+          expanded ? "shadow-md dark:shadow-lg dark:shadow-black/30" : ""
         }`}
       >
         {!expanded ? (
           <button
             type="button"
             onClick={() => setExpanded(true)}
-            className="flex h-12 w-full items-center rounded-lg px-4 text-left text-sm text-gray-600 hover:bg-gray-100"
+            className="flex h-12 w-full items-center rounded-lg px-4 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-[#9aa0a6] dark:hover:bg-[#3c4043]"
           >
             Take a note…
           </button>
@@ -57,7 +57,7 @@ export function NoteInput({ onSave }) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Title"
-              className="mb-2 border-0 bg-transparent text-base font-medium text-gray-800 placeholder:text-gray-500 focus:outline-none focus:ring-0"
+              className="mb-2 border-0 bg-transparent text-base font-medium text-gray-800 placeholder:text-gray-500 focus:outline-none focus:ring-0 dark:text-[#e8eaed] dark:placeholder-[#9aa0a6]"
               aria-label="Note title"
             />
             <textarea
@@ -65,13 +65,13 @@ export function NoteInput({ onSave }) {
               onChange={(e) => setContent(e.target.value)}
               placeholder="Take a note…"
               rows={4}
-              className="min-h-[100px] resize-none border-0 bg-transparent text-sm text-gray-800 placeholder:text-gray-500 focus:outline-none focus:ring-0"
+              className="min-h-[100px] resize-none border-0 bg-transparent text-sm text-gray-800 placeholder:text-gray-500 focus:outline-none focus:ring-0 dark:text-[#e8eaed] dark:placeholder-[#9aa0a6]"
               aria-label="Note content"
             />
             <div className="mt-2 flex items-center justify-between gap-2">
               <button
                 type="button"
-                className="rounded px-3 py-2 text-xs font-medium text-gray-400"
+                className="rounded px-3 py-2 text-xs font-medium text-gray-400 dark:text-[#9aa0a6]"
                 disabled
                 aria-disabled="true"
               >
@@ -80,7 +80,7 @@ export function NoteInput({ onSave }) {
               <button
                 type="button"
                 onClick={trySaveAndClose}
-                className="rounded px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                className="rounded px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-[#e8eaed] dark:hover:bg-[#3c4043]"
               >
                 Close
               </button>

@@ -13,13 +13,13 @@ const items = [
 ];
 
 const sideIcon =
-  "h-6 w-6 shrink-0 object-contain [filter:brightness(0)_saturate(100%)] opacity-70";
+  "h-6 w-6 shrink-0 object-contain [filter:brightness(0)_saturate(100%)] dark:[filter:none] opacity-70 dark:opacity-100";
 
 export function Sidebar({ mobileOpen, onCloseMobile }) {
   return (
     <>
       <div
-        className={`fixed inset-0 z-40 bg-black/20 transition md:hidden ${
+        className={`fixed inset-0 z-40 bg-black/20 transition md:hidden dark:bg-black/50 ${
           mobileOpen
             ? "pointer-events-auto opacity-100"
             : "pointer-events-none opacity-0"
@@ -27,8 +27,9 @@ export function Sidebar({ mobileOpen, onCloseMobile }) {
         aria-hidden={!mobileOpen}
         onClick={onCloseMobile}
       />
+
       <aside
-        className={`group fixed bottom-0 left-0 top-14 z-40 flex flex-col overflow-hidden border-r border-gray-200 bg-white py-2 transition-[width,transform] duration-200 ease-out md:w-[72px] md:hover:w-56 ${
+        className={`group fixed bottom-0 left-0 top-14 z-40 flex flex-col overflow-hidden border-r border-gray-200 bg-white py-2 transition-[width,transform] duration-200 ease-out dark:border-[#5f6368] dark:bg-[#202124] md:w-[72px] md:hover:w-56 ${
           mobileOpen
             ? "w-56 translate-x-0"
             : "w-[72px] -translate-x-full md:translate-x-0"
@@ -41,9 +42,9 @@ export function Sidebar({ mobileOpen, onCloseMobile }) {
               key={id}
               type="button"
               onClick={onCloseMobile}
-              className={`flex h-12 w-full items-center gap-5 rounded-r-full pl-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 ${
+              className={`flex h-12 w-full items-center gap-5 rounded-r-full pl-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-[#e8eaed] dark:hover:bg-[#3c4043] ${
                 selected
-                  ? "bg-[#feefc3] hover:bg-[#feefc3]"
+                  ? "bg-[#feefc3] hover:bg-[#feefc3] dark:bg-[#41331c] dark:hover:bg-[#41331c]"
                   : ""
               }`}
             >

@@ -6,6 +6,7 @@ import { NoteInput } from "@/components/NoteInput.jsx";
 import { NoteGrid } from "@/components/NoteGrid.jsx";
 
 const STORAGE_KEY = "keep-clone-notes-v1";
+const THEME_KEY = "keep-clone-theme";
 
 function createNote({ title, content }) {
   const now = Date.now();
@@ -28,11 +29,17 @@ function noteText(value) {
 
 export default function App() {
   const [notes, setNotes] = useLocalStorage(STORAGE_KEY, []);
+  const [theme, setTheme] = useLocalStorage(THEME_KEY, "light");
   const [searchQuery, setSearchQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [viewMode, setViewMode] = useState("masonry");
 
   const list = Array.isArray(notes) ? notes : [];
+  const themeMode = theme === "dark" ? "dark" : "light";
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", themeMode === "dark");
+  }, [themeMode]);
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -74,7 +81,7 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-full bg-white font-sans text-gray-900">
+    <div className="min-h-full bg-white font-sans text-gray-900 dark:bg-[#202124] dark:text-[#e8eaed]">
       <Navbar
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
@@ -84,16 +91,18 @@ export default function App() {
           setViewMode((m) => (m === "masonry" ? "list" : "masonry"))
         }
         viewMode={viewMode}
+        theme={themeMode}
+        onToggleTheme={() => setTheme(themeMode === "dark" ? "light" : "dark")}
       />
       <Sidebar
         mobileOpen={sidebarOpen}
         onCloseMobile={() => setSidebarOpen(false)}
       />
-      <main className="min-h-[calc(100%-3.5rem)] bg-white pt-4 pb-16 md:pl-[72px]">
+      <main className="min-h-[calc(100%-3.5rem)] bg-white pt-4 pb-16 dark:bg-[#202124] md:pl-[72px]">
         <div className="mx-auto max-w-[1400px] px-3 sm:px-6">
           <NoteInput onSave={handleSaveNote} />
           {filteredNotes.length === 0 ? (
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-center text-sm text-gray-500 dark:text-[#9aa0a6]">
               {searchQuery.trim()
                 ? "No matching notes."
                 : "Notes you add appear here."}
