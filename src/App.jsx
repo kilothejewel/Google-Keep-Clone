@@ -61,6 +61,8 @@ export default function App() {
     });
   }, [list, searchQuery]);
 
+  const dragDisabled = searchQuery.trim().length > 0;
+
   const handleSaveNote = useCallback(
     (payload) => {
       setNotes((prev) => [
@@ -110,7 +112,9 @@ export default function App() {
           ) : (
             <NoteGrid
               notes={filteredNotes}
+              onReorder={setNotes}
               onDelete={handleDelete}
+              dragDisabled={dragDisabled}
               viewMode={viewMode}
             />
           )}
