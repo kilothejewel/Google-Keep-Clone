@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { NoteColorPicker } from "./NoteColorPicker.jsx";
 
 function hasText(title, content) {
   return Boolean(title.trim() || content.trim());
@@ -8,24 +9,35 @@ export function NoteInput({ onSave }) {
   const [expanded, setExpanded] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [draftColor, setDraftColor] = useState("default");
+  const [pickerOpen, setPickerOpen] = useState(false);
   const rootRef = useRef(null);
+  const colorAnchorRef = useRef(null);
 
   const trySaveAndClose = useCallback(() => {
     if (hasText(title, content)) {
-      onSave({ title: title.trim(), content: content.trim() });
+      onSave({
+        title: title.trim(),
+        content: content.trim(),
+        color: draftColor,
+      });
     }
     setTitle("");
     setContent("");
+    setDraftColor("default");
+    setPickerOpen(false);
     setExpanded(false);
-  }, [content, onSave, title]);
+  }, [content, draftColor, onSave, title]);
 
   useEffect(() => {
     if (!expanded) return;
+
     const onPointerDown = (event) => {
       if (!rootRef.current) return;
       if (rootRef.current.contains(event.target)) return;
       trySaveAndClose();
     };
+
     document.addEventListener("mousedown", onPointerDown);
     document.addEventListener("touchstart", onPointerDown, { passive: true });
     return () => {
@@ -33,6 +45,16 @@ export function NoteInput({ onSave }) {
       document.removeEventListener("touchstart", onPointerDown);
     };
   }, [expanded, trySaveAndClose]);
+
+  useEffect(() => {
+    if (!pickerOpen) return;
+    const close = (e) => {
+      if (colorAnchorRef.current?.contains(e.target)) return;
+      setPickerOpen(false);
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [pickerOpen]);
 
   return (
     <div className="mx-auto mb-6 max-w-xl px-1">
@@ -51,7 +73,7 @@ export function NoteInput({ onSave }) {
             Take a note…
           </button>
         ) : (
-          <div className="flex flex-col p-3 pt-2">
+          <div className="relative flex flex-col p-3 pt-2">
             <input
               type="text"
               value={title}
@@ -69,14 +91,26 @@ export function NoteInput({ onSave }) {
               aria-label="Note content"
             />
             <div className="mt-2 flex items-center justify-between gap-2">
-              <button
-                type="button"
-                className="rounded px-3 py-2 text-xs font-medium text-gray-400 dark:text-[#9aa0a6]"
-                disabled
-                aria-disabled="true"
-              >
-                Color
-              </button>
+              <div className="relative" ref={colorAnchorRef}>
+                <button
+                  type="button"
+                  onClick={() => setPickerOpen((o) => !o)}
+                  className="rounded px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 dark:text-[#9aa0a6] dark:hover:bg-[#3c4043]"
+                  aria-expanded={pickerOpen}
+                  aria-haspopup="listbox"
+                >
+                  Color
+                </button>
+                {pickerOpen ? (
+                  <NoteColorPicker
+                    currentId={draftColor}
+                    onPick={(id) => {
+                      setDraftColor(id);
+                      setPickerOpen(false);
+                    }}
+                  />
+                ) : null}
+              </div>
               <button
                 type="button"
                 onClick={trySaveAndClose}

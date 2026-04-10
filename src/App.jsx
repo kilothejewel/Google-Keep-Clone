@@ -8,7 +8,7 @@ import { NoteGrid } from "@/components/NoteGrid.jsx";
 const STORAGE_KEY = "keep-clone-notes-v1";
 const THEME_KEY = "keep-clone-theme";
 
-function createNote({ title, content }) {
+function createNote({ title, content, color = "default" }) {
   const now = Date.now();
   return {
     id:
@@ -17,7 +17,7 @@ function createNote({ title, content }) {
         : `note-${now}-${Math.random().toString(36).slice(2, 9)}`,
     title,
     content,
-    color: "default",
+    color,
     isPinned: false,
     lastModified: now,
   };
@@ -82,6 +82,17 @@ export default function App() {
     [setNotes]
   );
 
+  const handleUpdateNoteColor = useCallback(
+    (id, color) => {
+      setNotes((prev) =>
+        (Array.isArray(prev) ? prev : []).map((n) =>
+          n.id === id ? { ...n, color, lastModified: Date.now() } : n
+        )
+      );
+    },
+    [setNotes]
+  );
+
   return (
     <div className="min-h-full bg-white font-sans text-gray-900 dark:bg-[#202124] dark:text-[#e8eaed]">
       <Navbar
@@ -96,10 +107,12 @@ export default function App() {
         theme={themeMode}
         onToggleTheme={() => setTheme(themeMode === "dark" ? "light" : "dark")}
       />
+
       <Sidebar
         mobileOpen={sidebarOpen}
         onCloseMobile={() => setSidebarOpen(false)}
       />
+
       <main className="min-h-[calc(100%-3.5rem)] bg-white pt-4 pb-16 dark:bg-[#202124] md:pl-[72px]">
         <div className="mx-auto max-w-[1400px] px-3 sm:px-6">
           <NoteInput onSave={handleSaveNote} />
@@ -114,6 +127,7 @@ export default function App() {
               notes={filteredNotes}
               onReorder={setNotes}
               onDelete={handleDelete}
+              onUpdateNoteColor={handleUpdateNoteColor}
               dragDisabled={dragDisabled}
               viewMode={viewMode}
             />

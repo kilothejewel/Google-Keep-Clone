@@ -15,7 +15,12 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { NoteCard } from "./NoteCard.jsx";
 
-function SortableNote({ note, onDelete, dragDisabled }) {
+function SortableNote({
+  note,
+  onDelete,
+  onUpdateNoteColor,
+  dragDisabled,
+}) {
   const {
     attributes,
     listeners,
@@ -44,6 +49,7 @@ function SortableNote({ note, onDelete, dragDisabled }) {
       <NoteCard
         note={note}
         onDelete={onDelete}
+        onUpdateNoteColor={onUpdateNoteColor}
         dragDisabled={dragDisabled}
         className={
           isDragging
@@ -55,7 +61,14 @@ function SortableNote({ note, onDelete, dragDisabled }) {
   );
 }
 
-export function NoteGrid({ notes, onReorder, onDelete, dragDisabled, viewMode }) {
+export function NoteGrid({
+  notes,
+  onReorder,
+  onDelete,
+  onUpdateNoteColor,
+  dragDisabled,
+  viewMode,
+}) {
   const ids = useMemo(() => notes.map((n) => n.id), [notes]);
 
   const sensors = useSensors(
@@ -90,6 +103,7 @@ export function NoteGrid({ notes, onReorder, onDelete, dragDisabled, viewMode })
               key={note.id}
               note={note}
               onDelete={onDelete}
+              onUpdateNoteColor={onUpdateNoteColor}
               dragDisabled={dragDisabled}
             />
           ))}
