@@ -3,3 +3,6 @@ dist
 .DS_Store
 *.local
 .restack-final
+
+# Local Netlify folder
+.netlify
